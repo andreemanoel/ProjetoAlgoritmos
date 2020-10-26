@@ -74,8 +74,13 @@ public class Player : MonoBehaviour
         }
         if(collision.gameObject.tag == "inimigo")
         {
-            GameController.instance.ShowGameOver();
-            Destroy(gameObject);
+            GameController.instance.totalVidas --;
+            GameController.instance.UpdateTextVidas();
+            if((GameController.instance.totalVidas) == 0)
+            {
+                GameController.instance.ShowGameOver();
+                Destroy(gameObject);
+            }
         }
     }
 

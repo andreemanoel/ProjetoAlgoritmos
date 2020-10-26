@@ -7,7 +7,9 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     public int totalScore;
+    public int totalVidas;
     public Text scoreText;
+    public Text textVidas;
 
     public GameObject gameOver;
     public GameObject nextLvl;
@@ -19,12 +21,17 @@ public class GameController : MonoBehaviour
     void Start()
     {
         instance = this;
+        UpdateTextVidas();
     }
 
     public void UpdateScoreText()
     {
         //ToString tranforma o valor em text
         scoreText.text = totalScore.ToString();
+    }
+    public void UpdateTextVidas()
+    {
+        textVidas.text = totalVidas.ToString();
     }
 
     public void ShowGameOver()
