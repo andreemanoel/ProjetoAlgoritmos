@@ -8,6 +8,7 @@ public class Moedas : MonoBehaviour
 
     private SpriteRenderer sprite;
     private CircleCollider2D circle;
+    private AudioSource audio;
 
     public GameObject collected;
 
@@ -16,12 +17,14 @@ public class Moedas : MonoBehaviour
     {
         sprite = GetComponent<SpriteRenderer>();
         circle = GetComponent<CircleCollider2D>();
+        audio = GetComponent<AudioSource>();
     }
 
     void OnTriggerEnter2D(Collider2D collider)
     {
         if(collider.gameObject.tag == "Player")
         {
+            audio.Play();
             sprite.enabled = false;
             circle.enabled = false;
             collected.SetActive(true);
@@ -30,7 +33,7 @@ public class Moedas : MonoBehaviour
             GameController.instance.UpdateScoreText();
 
             //pegando o propio objeto que esta com esse script e destruindo em 1 segundo
-            Destroy(gameObject, 0.3f);
+            Destroy(gameObject, 0.6f);
         }
     }
 }

@@ -12,6 +12,13 @@ public class Player : MonoBehaviour
     private Rigidbody2D rig;
     private Animator anim;
     private SpriteRenderer sprite;
+    private AudioSource gritoAudio;
+
+    //Variaveis do tiro
+    public Transform bulletSpawn;
+    public GameObject bulletObject;
+    public float fireRate;
+    private float nextFire;
 
     // Start is called before the first frame update
     //Deu play no jogo, metodo start é chamado uma vez
@@ -21,6 +28,7 @@ public class Player : MonoBehaviour
         rig = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
+        gritoAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -29,6 +37,7 @@ public class Player : MonoBehaviour
     {
         Move();
         Jump();
+        Tiro();
     }
 
     void Move()
@@ -36,14 +45,18 @@ public class Player : MonoBehaviour
         float mov = Input.GetAxis("Horizontal");
         //movimenta só o eixo x, Horizontal nome padrao unity das teclas ;
         Vector3 movimento = new Vector3(mov, 0f, 0f);
+        //Time.deltatime é para ele ter um movimento constante, movento velocidade x a cada segundo
         transform.position += movimento * Time.deltaTime * speed;
 
-        if((mov > 0f && sprite.flipX) || (mov < 0f && !sprite.flipX))
+        if(mov > 0f || mov < 0f)
         {
-            Flip();
             anim.SetBool("andar", true);
         }
 
+        if((mov > 0f && sprite.flipX) || (mov < 0f && !sprite.flipX))
+        { 
+            Flip();
+        }
         if(mov == 0f)
         {
             anim.SetBool("andar", false);
@@ -54,8 +67,14 @@ public class Player : MonoBehaviour
     {
         //Jump é o espaço no padrão unity(Project Setting)
         if(Input.GetButtonDown("Jump") && isJump == false){
-            anim.SetBool("pular", true);
             rig.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+        }
+    }
+    void Tiro ()
+    {
+        if(Input.GetKey(KeyCode.Q) && Time.time > nextFire)
+        {
+            Fire();
         }
     }
     //metodo da unity
@@ -74,6 +93,7 @@ public class Player : MonoBehaviour
         }
         if(collision.gameObject.tag == "inimigo")
         {
+            gritoAudio.Play();
             GameController.instance.totalVidas --;
             GameController.instance.UpdateTextVidas();
             if((GameController.instance.totalVidas) == 0)
@@ -90,6 +110,7 @@ public class Player : MonoBehaviour
         if(collision.gameObject.layer == 8)
         {
             isJump = true;
+            anim.SetBool("pular", true);
         }
     }
 
@@ -105,6 +126,22 @@ public class Player : MonoBehaviour
     void Flip()
     {
         sprite.flipX = !sprite.flipX;
+
+        if (!sprite.flipX){
+            bulletSpawn.position = new Vector3 (transform.position.x + 0.4f, bulletSpawn.position.y, bulletSpawn.position.z);
+        }else{
+            bulletSpawn.position = new Vector3 (transform.position.x - 0.4f, bulletSpawn.position.y, bulletSpawn.position.z);
+        }
+    }
+
+    void Fire ()
+    {
+        nextFire = Time.time + fireRate;
+        GameObject cloneBullet = Instantiate (bulletObject, bulletSpawn.position, bulletSpawn.rotation);
+        if(sprite.flipX)
+        {
+            cloneBullet.transform.eulerAngles = new Vector3(0f,0f,180f);
+        }
     }
 
     

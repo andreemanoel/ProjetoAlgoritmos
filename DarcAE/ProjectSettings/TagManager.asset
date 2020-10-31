@@ -7,6 +7,8 @@ TagManager:
   - spinho
   - proxLvl
   - inimigo
+  - bullet
+  - parede
   layers:
   - Default
   - TransparentFX
@@ -18,7 +20,7 @@ TagManager:
   - 
   - ground
   - gameOver
-  - parede
+  - 
   - 
   - 
   - 

@@ -4,39 +4,39 @@ using UnityEngine;
 
 public class Inimigo : MonoBehaviour
 {
-    private float speed = 1;
-    private float mov = 1;
+    private float speed = 2f;
 
     private SpriteRenderer sprite;
-    private Rigidbody2D rig;
+    private Animator anim;
     
     // Start is called before the first frame update
     void Start()
     {
-        rig = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Move();
-    }
-    void Move()
-    {
-        Vector3 movimento = new Vector3(mov, 0f, 0f);
-        transform.position += movimento * Time.deltaTime * speed;
+        transform.position += new Vector3(speed * Time.deltaTime, 0f, 0f);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collider)
     {
-        if(collision.gameObject.layer == 10)
+        if(collider.gameObject.tag == "parede")
         {
-            mov = mov *-1;
-            Move();
             Flip();
+            speed *= -1f;
+        }
+        if(collider.gameObject.tag == "bullet")
+        {
+            anim.SetTrigger("dead");
+            speed = 0;
+            Destroy(gameObject, 0.3f);
         }
     }
+
     void Flip()
     {
         sprite.flipX = !sprite.flipX;

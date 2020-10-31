@@ -46,6 +46,13 @@ public class GameController : MonoBehaviour
 
     public void NextLvl()
     {
-        nextLvl.SetActive(true);
+        if(totalScore == 16)
+        {
+            nextLvl.SetActive(true);
+        }else
+        {
+            ShowGameOver();
+        }
+        
     }
 }
