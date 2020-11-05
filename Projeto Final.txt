@@ -1,0 +1,8 @@
+André Emanoel de Carvalho
+2065738
+
+link GitHub: https://github.com/andreemanoel/ProjetoAlgoritmos.git
+
+Esse projeto foi desenvolvido na versão 2019.1.13 da Unity.
+Para poder jogar, usa-se as teclas setas direita e esquerda para andar,
+espaço para pular e a tecla Q para atirar.
